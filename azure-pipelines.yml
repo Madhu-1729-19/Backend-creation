@@ -5,8 +5,6 @@ variables:
   version: 'backend_$(Build.BuildId)'
 
 stages:
-
-# ✅ 1. Checkout Code
 - stage: CheckoutCode
   displayName: 'Checkout Code'
   jobs:
@@ -15,7 +13,6 @@ stages:
     steps:
     - checkout: self
 
-# ✅ 2. Build Docker Image
 - stage: BuildDockerImage
   displayName: 'Build Docker Image'
   dependsOn: CheckoutCode
@@ -26,14 +23,14 @@ stages:
     - task: Docker@2
       displayName: 'Build Docker Image'
       inputs:
-        containerRegistry: 'backend'          # MUST be ACR connection
-        repository: 'backend-creation'        # lowercase
+        containerRegistry: 'backend'
+        repository: 'backend-creation'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: |
-          $(version)
+          backend_$(Build.BuildId)
+      name: buildImage
 
-# ✅ 3. Push Docker Image
 - stage: PushDockerImage
   displayName: 'Push Docker Image'
   dependsOn: BuildDockerImage
@@ -42,15 +39,13 @@ stages:
     displayName: 'Push Docker Image to ACR'
     steps:
     - task: Docker@2
-      displayName: 'Push Docker Image'
+      displayName: 'Push Docker Image' 
       inputs:
-        containerRegistry: 'backend'          # MUST be ACR connection
+        containerRegistry: 'backend'
         repository: 'backend-creation'
         command: 'push'
         tags: |
           $(version)
-
-# ✅ 4. Cleanup Docker Images
 - stage: CleanupDockerImages
   displayName: 'Clean Up Docker Images'
   dependsOn: PushDockerImage
@@ -59,10 +54,9 @@ stages:
     displayName: 'Clean Up Docker Images'
     steps:
     - script: |
-        docker rmi -f $(docker images -aq) || true
+        docker rmi -f $(docker images -aq)
       displayName: 'Remove all Docker images'
 
-# ✅ 5. Modify & Publish Kubernetes YAML
 - stage: ModifyAndPublishYaml
   displayName: 'Modify and Publish Kubernetes Manifest'
   dependsOn: CleanupDockerImages
