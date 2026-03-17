@@ -24,7 +24,7 @@ stages:
       displayName: 'Build Docker Image'
       inputs:
         containerRegistry: 'backend'
-        repository: 'Madhu-172-19/Backend-project'
+        repository: 'Backend-Creation'
         command: 'build'
         Dockerfile: '**/Dockerfile'
         tags: |
@@ -42,7 +42,7 @@ stages:
       displayName: 'Push Docker Image' 
       inputs:
         containerRegistry: 'backend'
-        repository: 'Madhu-172-19/Backend-project'
+        repository: 'Backend-Creation'
         command: 'push'
         tags: |
           $(version)
