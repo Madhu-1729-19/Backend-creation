@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-api
-        image: hanuman.azurecr.io/backendcreation:backend_$(Build.BuildId)
+        image: hanuman.azurecr.io/backendcreation:backend_205
         imagePullPolicy: Always
         env:
           - name: DB_CONN_STR
