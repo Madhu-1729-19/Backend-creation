@@ -27,8 +27,9 @@ stages:
         repository: 'backendcreation'
         command: 'build'
         Dockerfile: '**/Dockerfile'
-        tags: |
-          backend_$(Build.BuildId)
+        tags:  |
+         latest
+         backend_$(Build.BuildId)
       name: buildImage
 
 - stage: PushDockerImage
@@ -44,7 +45,8 @@ stages:
         containerRegistry: 'hanuman'
         repository: 'backendcreation'
         command: 'push'
-        tags: |
+        tags:  |
+          latest
           $(version)
 - stage: CleanupDockerImages
   displayName: 'Clean Up Docker Images'
