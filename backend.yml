@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-api
-        image: madhu.azurecr.io/backendcreation:VERSION
+        image: hanuman.azurecr.io/backendcreation:backend_$(Build.BuildId)
         imagePullPolicy: Always
         env:
           - name: DB_CONN_STR
