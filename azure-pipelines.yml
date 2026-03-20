@@ -1,5 +1,5 @@
 pool:
-  name: 'project'
+  name: 'editor'
   
 variables:
   version: 'backend_$(Build.BuildId)'
@@ -23,13 +23,12 @@ stages:
     - task: Docker@2
       displayName: 'Build Docker Image'
       inputs:
-        containerRegistry: 'hanuman'
-        repository: 'backendcreation'
+        containerRegistry: 'hanuman1'
+        repository: 'backend'
         command: 'build'
         Dockerfile: '**/Dockerfile'
-        tags:  |
-         latest
-         backend_$(Build.BuildId)
+        tags: |
+          backend_$(Build.BuildId)
       name: buildImage
 
 - stage: PushDockerImage
@@ -42,11 +41,10 @@ stages:
     - task: Docker@2
       displayName: 'Push Docker Image' 
       inputs:
-        containerRegistry: 'hanuman'
-        repository: 'backendcreation'
+        containerRegistry: 'hanuman1'
+        repository: 'backend'
         command: 'push'
-        tags:  |
-          latest
+        tags: |
           $(version)
 - stage: CleanupDockerImages
   displayName: 'Clean Up Docker Images'
@@ -56,7 +54,7 @@ stages:
     displayName: 'Clean Up Docker Images'
     steps:
     - script: |
-        docker rmi -f $(docker images -aq)
+        docker images -aq | xargs -r docker rmi -f
       displayName: 'Remove all Docker images'
 
 - stage: ModifyAndPublishYaml
